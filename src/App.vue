@@ -1,28 +1,57 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+	<div id="app">
+		<div class="container">
+			<app-fileupload></app-fileupload>
+		</div>
+	</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import AppFileupload from '@/components/AppFileupload';
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+	name: 'App',
+	components: {
+		AppFileupload,
+	},
+};
 </script>
 
 <style>
+h1,
+h2,
+h3,
+p {
+	margin: 0;
+	padding: 0;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+	font-family: Avenir, Helvetica, Arial, sans-serif;
+	margin-top: 60px;
+}
+
+.container {
+	display: block;
+	margin: auto;
+}
+
+/* Add basic nedia queries for responsiveness */
+@media (min-width: 600px) {
+	.container {
+		width: 80%;
+	}
+}
+
+@media (min-width: 800px) {
+	.container {
+		width: 60%;
+	}
+}
+
+@media (min-width: 1000px) {
+	.container {
+		width: 50%;
+	}
 }
 </style>
