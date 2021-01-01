@@ -1,24 +1,17 @@
-# dnd
+# Vue.js drag & drop component
 
-## Project setup
-```
-npm install
-```
+This repository is a boilerplate for my blog entry on How to [Build a streaming drag and drop upload section with Vue.js](https://q-bit.me/build-a-drag-and-drop-upload-section-with-vue-js).
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+You can set it up on your local mashine like this:
 
-### Compiles and minifies for production
-```
-npm run build
-```
+```sh
+# Clone the repository
+$ git clone https://github.com/tq-bit/vue-upload-component.git
+$ cd vue-upload-component
 
-### Lints and fixes files
-```
-npm run lint
+# Install node dependencies and run the development server
+$ npm install
+$ npm run serve
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Then, open your browser and navigate to 127.0.0.1:8080 and start building.
