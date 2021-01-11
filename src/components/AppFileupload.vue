@@ -4,18 +4,23 @@
 			<h2>{{ headingText || 'Fileupload demo' }}</h2>
 		</div>
 
-    <!-- The body will serve as our actual drag and drop zone -->
-		<div class="upload-body">
+		<div
+			v-on:dragover.prevent="handleDragOver"
+			v-on:drop.prevent="handleDrop"
+			v-on:dragleave.prevent="handleDragLeave"
+			class="upload-body"
+			:class="{ 'upload-body-dragged': status.over }"
+		>
 			{{ bodyText || 'Drop your files here' }}
 		</div>
 
 		<div class="upload-footer">
-			<div>
+			<div v-if="status.dropped">
 				<!-- Display the information related to the file -->
 				<p class="upload-footer-file-name">{{ file.name }}</p>
 				<small class="upload-footer-file-size">Size: {{ file.size }} kb</small>
 			</div>
-			<button class="upload-footer-button">
+			<button @click="handleFileupload" class="upload-footer-button">
 				{{ footerText || 'Upload' }}
 			</button>
 		</div>
@@ -35,8 +40,54 @@ export default {
 			file: {
 				name: 'MyScreenshot.jpg',
 				size: 281923,
+				value: '',
+			},
+			// Add the drag and drop status as an object
+			status: {
+				over: false,
+				dropped: false,
 			},
 		};
+	},
+
+	methods: {
+		handleDragOver() {
+			this.status.over = true;
+		},
+		handleDrop(event) {
+			this.status.dropped = true;
+			this.status.over = false;
+			const fileItem = event.dataTransfer.items[0].getAsFile();
+			this.file = {
+				name: fileItem.name,
+				size: (fileItem.size / 1000).toFixed(2),
+			};
+			const reader = new FileReader();
+
+			reader.readAsArrayBuffer(fileItem);
+			reader.onloadend = event => {
+				// Take the reader's result and use it for the next method
+				const file = event.target.result;
+				this.file.value = file;
+				// Emit an event to the parent component
+				this.$emit('fileLoaded', this.file);
+			};
+		},
+		handleDragLeave() {
+			this.status.over = false;
+		},
+		async handleFileupload() {
+			const url = 'https://vue-upload-server.herokuapp.com/';
+			const options = { method: 'post', body: this.file.value };
+			try {
+				const response = await fetch(url, options);
+				const data = await response.json();
+				const { bytes, type } = data;
+				alert(`Success! \nFilesize: ${(bytes / 1000).toFixed(2)} kb \nType: ${type.mime}`)
+			} catch (e) {
+				alert('Error! \nAn error occured: \n' + e);
+			}
+		},
 	},
 };
 </script>
@@ -63,8 +114,8 @@ export default {
 	align-items: center;
 	background-color: #fafafa;
 	color: #486684;
-  display: flex;
-  font-size: 1.5rem;
+	display: flex;
+	font-size: 1.5rem;
 	justify-content: center;
 	min-height: 25vh;
 }
@@ -100,5 +151,10 @@ export default {
 	background-color: #fff;
 	color: #486684;
 	transition: 0.25s all;
+}
+
+.upload-body-dragged {
+	color: #fff;
+	background-color: #b6d1ec;
 }
 </style>
